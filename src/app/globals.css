@@ -1,26 +1,81 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  h1 {
+      @apply text-4xl font-semibold
+  }
+  h2 {
+      @apply text-2xl font-semibold
+  }
+  h3 {
+      @apply text-base font-semibold
+  }
+  h4 {
+      @apply text-sm font-semibold 
+  }
+  h5 {
+      @apply text-xs font-semibold
+  }
+  h6 {
+      @apply text-[10px] font-semibold
+  }
+  ol {
+      @apply list-decimal pl-5
+  }
+  ul {
+      @apply list-disc pl-5
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .editorBtn {
+      @apply px-2 py-0.5 text-sm font-semibold rounded-sm
+  }
+}
+
+.tiptap {
+  outline: none;
+  min-height: 300px;
+}
+.tiptap a {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.textEditorHeader span {
+  cursor: pointer;
+}
+
+
+
+
+.national > :nth-child(1) {
+  width: 49%;
+  height: auto;
+}
+
+.national > :nth-child(2) {
+  width: 49%;
+  
+}
+.national > :nth-child(1) > div,
+.national > :nth-child(2)  > div {
+  height: 190px !important;
+}
+
+.national > a {
+  width: 32%;
+  
+}
+
+.cHeight {
+  width: 200px
 }
