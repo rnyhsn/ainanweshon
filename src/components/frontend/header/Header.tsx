@@ -11,10 +11,9 @@ import { getHeader } from "@/utils/action/siteCustom";
 
 const Header = async () => {
   const resp = await getHeaderCategories();
-  const session = await auth();
+  const session: any = await auth();
   const header = await getHeader();
-  console.log(header);
-  // console.log("Header: ");
+  const role = session?.user?.role || "USER";
   return (
     <div className="bg-gray-950 text-white py-5 px-4 lg:px-10 flex flex-col">
       {/* Header Top Section */}
@@ -31,7 +30,13 @@ const Header = async () => {
                 <input type="text" className="px-3 py-1.5 text-sm outline-none rounded-sm bg-white text-black" />
               {
                 session?.user && 
-                <LogoutBtn />
+                <div className="flex flex-col gap-1">
+                {
+                  role === 'ADMIN' &&
+                  <Link href="/dashboard" className="px-4 py-1.5 bg-blue-600 rounded-sm"> Dashboard </Link>
+                }
+                  <LogoutBtn />
+                </div>
               }
             </div>
         </div>

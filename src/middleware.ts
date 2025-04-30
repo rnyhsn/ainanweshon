@@ -1,13 +1,20 @@
-import { NextResponse } from "next/server";
-import { auth } from "./utils/auth";
+import { NextRequest, NextResponse } from "next/server";
+import { authConfig } from "./utils/auth.config";
+import NextAuth from "next-auth";
+import { getToken } from "next-auth/jwt";
 
 
-export default auth((req) => {
 
-    const user = req.auth?.user;
-    const isAuthenticated = !!user;
-    const userRole = (user as {role?: string})?.role;
+const {auth} = NextAuth(authConfig);
 
+
+export default async function middleware(req: NextRequest) {
+
+    const token = await getToken({req, secret: process.env.AUTH_SECRET })
+    console.log("Token", token);
+    const isAuthenticated = !!token;
+    const userRole = token?.role;
+    console.log("Role", userRole);
     if(!isAuthenticated && req.nextUrl.pathname.startsWith('/submission')) {
         return NextResponse.redirect(new URL('/login', req.url));
     }
@@ -27,7 +34,7 @@ export default auth((req) => {
 
 
 
-})
+}
 
 export const config = {
     matcher: [

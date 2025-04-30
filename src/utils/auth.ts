@@ -4,12 +4,23 @@ import Google from "next-auth/providers/google";
 import { connectToDB } from "./db";
 import { User } from "./model/user.model";
 import bcrypt from "bcryptjs";
-
+import { authConfig } from "./auth.config";
 
 
 export const {auth, signIn, signOut, handlers} = NextAuth({
+    ...authConfig,
     providers: [
-        Google,
+        Google({
+            clientId: process.env.AUTH_GOOGLE_ID,
+            clientSecret: process.env.AUTH_GOOGLE_SECRET,
+            authorization: {
+                params: {
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code"
+                }
+            }
+        }),
         Credentials({
             authorize: async(credentials) => {
                 // console.log( "Credentials: ", credentials);
@@ -49,20 +60,21 @@ export const {auth, signIn, signOut, handlers} = NextAuth({
             } else {
                 (user as {role: string}).role = exist.role
             }
+
             return true;
         },
         async jwt({token, user}) {
             if(user) {
                 token.role = (user as {role: string}).role;
             }
-           
+
             return token;
         },
         async session({session, token}: {session: any, token: any}) {
             session.user.role = token.role;
-
-            
+  
             return session;
         }
-    }
+    },
+    trustHost: true
 })

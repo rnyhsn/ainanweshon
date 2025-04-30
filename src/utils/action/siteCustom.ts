@@ -77,6 +77,7 @@ export const deleteSiteInfo = async (id: string) => {
 
 export const getHeader = async () => {
     try {
+        await connectToDB();
         const resp = await SiteLogo.findOne({position: 'Header'});
         return resp;
     } catch (error) {
@@ -87,6 +88,7 @@ export const getHeader = async () => {
 export const getFooter = async () => {
 
     try {
+        await connectToDB();
         const resp = await SiteLogo.findOne({position: 'Footer'});
         return resp;
     } catch (error) {
