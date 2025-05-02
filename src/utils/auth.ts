@@ -29,7 +29,7 @@ export const {auth, signIn, signOut, handlers} = NextAuth({
                 
                 const userExist = await User.findOne({email: credentials.email});
                 if(!userExist) {
-                    throw new Error("User does no exist");
+                    throw new Error("Invalid Email or Password");
                 } else {
                     if(userExist.password) {
                         const passCompare = await bcrypt.compare(credentials.password as string, userExist.password);
@@ -64,8 +64,8 @@ export const {auth, signIn, signOut, handlers} = NextAuth({
             return true;
         },
         async jwt({token, user}) {
-            if(user) {
-                token.role = (user as {role: string}).role;
+            if(user && 'role' in user) {
+                token.role = (user as any).role;
             }
 
             return token;
