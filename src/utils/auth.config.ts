@@ -1,4 +1,4 @@
-/**
+/*
 import { NextAuthConfig } from "next-auth";
 import { connectToDB } from "./db";
 import { User } from "./model/user.model";
@@ -58,7 +58,7 @@ export const authConfig: NextAuthConfig =  {
     }
 }
 
-**/
+*/
 
 import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -83,7 +83,7 @@ export const authConfig: NextAuthConfig = {
                 await connectToDB();
                 const {email, password} = credentials;
                 if(!email || !password) {
-                    throw new Error("E-mail and Password is required");
+                    throw new Error("Each Field is required");
                 }
                 const user = await User.findOne({email});
                 if(!user || !user.password) {
@@ -128,6 +128,8 @@ export const authConfig: NextAuthConfig = {
         }
     },
     pages: {
-        signIn: "/login"
-    }
+        signIn: "/login",
+        error: "/login"
+    },
+    trustHost: true
 }

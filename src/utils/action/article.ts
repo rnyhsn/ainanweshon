@@ -1,6 +1,6 @@
 'use server';
 
-import { exists } from "fs";
+
 import { deleteFile, uploadFile } from "../cloudinary";
 import { connectToDB } from "../db";
 import { Article } from "../model/article.model";
@@ -39,8 +39,7 @@ export const createArticle = async (formData: FormData, categories?: {name: stri
             articleType,
             categories: categoryIds
         })
-        console.log(validated);
-        console.log(slug);
+    
         if(!validated.success) {
             const errors = validated.error.flatten().fieldErrors
             return errorResponse("Some Errors", 400, errors);
@@ -252,7 +251,6 @@ export const getArticle = async (id: string) => {
             attachedAuthors: resp.attachedAuthors?.length > 0 ? resp.attachedAuthors.map((author: any) => ({...author, _id: author._id.toString()})) : []
         }
 
-        // console.log("Article: ", art);
         return successResponse(200, "fetched successfull", article);
     } catch (error) {
         console.log(error);
@@ -264,12 +262,11 @@ export const getArticle = async (id: string) => {
 
 export const getArticleBySlug = async (s: string) => {
     const slug = decodeURIComponent(s);
-    console.log("Slug:", slug);
 
     try {
         await connectToDB();
         const resp = await Article.findOne({slug});
-        console.log(resp);
+        
         if(!resp) {
             return errorResponse("Article not Found", 404);
         }
@@ -287,7 +284,7 @@ export const deleteArticle = async (id: string) => {
     try {
         await connectToDB();
         const resp = await Article.findByIdAndDelete(id);
-        console.log(resp);
+        
         if(resp.image_public_key) {
             const res = await deleteFile(resp.image_public_key);
             console.log(res);
@@ -351,7 +348,6 @@ export const updateArticle = async (formData: FormData, categories?: string[], t
             articleType,
             categories: updatedCats
         })
-        console.log("Not error");
         if(!validated.success) {
             const errors = validated.error.flatten().fieldErrors;
             return errorResponse("Fields Errors", 400, errors);
@@ -401,7 +397,7 @@ export const updateArticle = async (formData: FormData, categories?: string[], t
                 file_url: fileDelete === 'on' ? "" : exist?.file_url,
                 file_public_key: fileDelete === 'on' ? "" : exist?.file_public_key
             }
-        console.log("Updated fields:", updatedFields);
+        
 
         const resp: any = await Article.findByIdAndUpdate(id, updatedFields);
 
@@ -409,7 +405,6 @@ export const updateArticle = async (formData: FormData, categories?: string[], t
             return errorResponse("Article Not Found", 404);
         }
 
-        console.log("Resp: ", resp);
 
     
         return successResponse(201, "Article Updated successfully");
@@ -459,9 +454,8 @@ export const getArticlesByCategorySlug = async (slug: string) => {
         const cats = await Category.find({$or : [{_id: cat._id}, {parent: cat._id}]});
         // console.log("Category: ", resp);
         const catsId = cats.map((cat) => cat._id);
-        console.log(catsId);
+       
         const articles = await Article.find({categories: {$in: catsId}}).sort({createdAt: -1});
-        console.log(articles);
 
         return successResponse(200, cat.name , articles);
         

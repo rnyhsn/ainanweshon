@@ -13,8 +13,13 @@ const Header = async () => {
   const resp = await getHeaderCategories();
   const session: any = await auth();
   console.log("Header session:", session);
+  console.log("Header session:", session);
   const header = await getHeader();
   const role = session?.user?.role || "USER";
+  console.log("Role in Header:", role);
+  console.log("Header session 2: ", session);
+  console.log("Header session: 3 ", session);
+  console.log("Header session: 4 ", session);
   return (
     <div className="bg-gray-950 text-white py-5 px-4 lg:px-10 flex flex-col">
       {/* Header Top Section */}

@@ -58,6 +58,8 @@ export const config = {
 
 */
 
+/*
+
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "./utils/auth";
 import { getToken } from "next-auth/jwt";
@@ -88,6 +90,66 @@ export default async function middleware(req: NextRequest) {
     }
     return NextResponse.next();
 }
+
+export const config = {
+  matcher: [
+            "/((?!api|_next/static|_next/image|favicon.ico).*)",
+            "/dashboard/:path*", 
+            "/submission", 
+            "/login", 
+            "/register"
+        ],
+};
+
+*/
+
+// import { NextRequest } from "next/server";
+// import { authConfig } from "./utils/auth.config";
+// import NextAuth from "next-auth";
+
+// const { auth } = NextAuth(authConfig);
+
+// export async function middleware(request: NextRequest) {
+//     const session = await auth();
+//     console.log("user:", session);
+// }
+
+
+import { NextRequest, NextResponse } from "next/server";
+import { authEdgeConfig } from "./utils/auth-edge.config";
+import NextAuth from "next-auth";
+import { getToken } from "next-auth/jwt";
+
+
+
+// export default auth(async function middleware(req) {
+//     const auth = req.auth;
+//     console.log(auth);
+// })
+
+export default async function middleware(req: NextRequest) {
+    const {pathname} = req.nextUrl;
+  
+    const token = await getToken({req, secret: process.env.AUTH_SECRET});
+    console.log("Token: ", token);
+    const isAuthenticated = !!token;
+    console.log("authenticated:", isAuthenticated);
+    const role = token?.role;
+    console.log("Role:", role);
+    if(!isAuthenticated && ['/dashboard', '/submission'].some((path) => pathname.startsWith(path))) {
+        return NextResponse.redirect(new URL('/login', req.url));
+    }
+    if(isAuthenticated) {
+        if(['/login', '/register'].includes(pathname)) {
+            return NextResponse.redirect(new URL('/', req.url));
+        }
+        if(pathname.startsWith('/dashboard') && role !== 'ADMIN') {
+            return NextResponse.redirect(new URL('/', req.url));
+        }
+    }
+    return NextResponse.next();
+}
+
 
 export const config = {
   matcher: [

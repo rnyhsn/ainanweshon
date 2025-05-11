@@ -4,7 +4,7 @@ import PageTitle from '@/components/backend/body/PageTitle'
 import Pagination from '@/components/backend/body/Pagination';
 import SearchSort from '@/components/backend/body/SearchSort';
 import { getArticles } from '@/utils/action/article'
-import { Article } from '@/utils/model/article.model';
+
 import Link from 'next/link';
 import React from 'react'
 import { FaRegEdit } from 'react-icons/fa';
