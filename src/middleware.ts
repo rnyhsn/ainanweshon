@@ -116,8 +116,8 @@ export const config = {
 
 
 import { NextRequest, NextResponse } from "next/server";
-import { authEdgeConfig } from "./utils/auth-edge.config";
-import NextAuth from "next-auth";
+// import { authEdgeConfig } from "./utils/auth-edge.config";
+// import NextAuth from "next-auth";
 import { getToken } from "next-auth/jwt";
 
 
@@ -130,7 +130,7 @@ import { getToken } from "next-auth/jwt";
 export default async function middleware(req: NextRequest) {
     const {pathname} = req.nextUrl;
   
-    const token = await getToken({req, secret: process.env.AUTH_SECRET});
+    const token = await getToken({req, secret: process.env.AUTH_SECRET ?? '9c0gXFghyQB/5KS45a64Dd3D6U2I1GGPbtt2VxQhn0c'});
     console.log("Token: ", token);
     const isAuthenticated = !!token;
     console.log("authenticated:", isAuthenticated);
