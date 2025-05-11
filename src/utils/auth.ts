@@ -1,3 +1,4 @@
+/*
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
@@ -44,37 +45,13 @@ export const {auth, signIn, signOut, handlers} = NextAuth({
             }
         })
     ],
-    callbacks: {
-        async signIn({user, account}) {
-            await connectToDB();
-            const exist = await User.findOne({email: user.email});
-
-            if(!exist) {
-                (user as {role: string}).role = 'USER';
-                const newUser = new User({
-                    name: user.name,
-                    email: user.email,
-                    provider: account?.provider
-                })
-                await newUser.save();
-            } else {
-                (user as {role: string}).role = exist.role
-            }
-
-            return true;
-        },
-        async jwt({token, user}) {
-            if(user && 'role' in user) {
-                token.role = (user as any).role;
-            }
-
-            return token;
-        },
-        async session({session, token}: {session: any, token: any}) {
-            session.user.role = token.role;
-  
-            return session;
-        }
-    },
+ 
     trustHost: true
 })
+
+*/
+
+import NextAuth from "next-auth";
+import { authConfig } from "./auth.config";
+
+export const { signIn, signOut, handlers, auth } = NextAuth(authConfig);

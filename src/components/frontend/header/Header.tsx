@@ -12,6 +12,7 @@ import { getHeader } from "@/utils/action/siteCustom";
 const Header = async () => {
   const resp = await getHeaderCategories();
   const session: any = await auth();
+  console.log("Header session:", session);
   const header = await getHeader();
   const role = session?.user?.role || "USER";
   return (
