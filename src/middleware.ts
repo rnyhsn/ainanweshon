@@ -116,8 +116,8 @@ export const config = {
 
 
 import { NextRequest, NextResponse } from "next/server";
-// import { authEdgeConfig } from "./utils/auth-edge.config";
-// import NextAuth from "next-auth";
+import { authEdgeConfig } from "./utils/auth-edge.config";
+import NextAuth from "next-auth";
 import { getToken } from "next-auth/jwt";
 
 
@@ -127,15 +127,19 @@ import { getToken } from "next-auth/jwt";
 //     console.log(auth);
 // })
 
+const {auth} = NextAuth(authEdgeConfig);
+
 export default async function middleware(req: NextRequest) {
     const {pathname} = req.nextUrl;
-  
-    const token = await getToken({req, secret: process.env.AUTH_SECRET ?? '9c0gXFghyQB/5KS45a64Dd3D6U2I1GGPbtt2VxQhn0c'});
+    const session = await auth();
+    const token = session?.user;
+    // console.log("session in md:", session);
+    // const token = await getToken({req, secret: process.env.AUTH_SECRET ?? '9c0gXFghyQB/5KS45a64Dd3D6U2I1GGPbtt2VxQhn0c'});
     console.log("Token: ", token);
     const isAuthenticated = !!token;
     console.log("authenticated:", isAuthenticated);
-    const role = token?.role;
-    console.log("Role:", role);
+    // const role = token?.role;
+    // console.log("Role:", role);
     if(!isAuthenticated && ['/dashboard', '/submission'].some((path) => pathname.startsWith(path))) {
         return NextResponse.redirect(new URL('/login', req.url));
     }
@@ -143,9 +147,9 @@ export default async function middleware(req: NextRequest) {
         if(['/login', '/register'].includes(pathname)) {
             return NextResponse.redirect(new URL('/', req.url));
         }
-        if(pathname.startsWith('/dashboard') && role !== 'ADMIN') {
-            return NextResponse.redirect(new URL('/', req.url));
-        }
+        // if(pathname.startsWith('/dashboard') && role !== 'ADMIN') {
+        //     return NextResponse.redirect(new URL('/', req.url));
+        // }
     }
     return NextResponse.next();
 }
@@ -153,7 +157,6 @@ export default async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-            "/((?!api|_next/static|_next/image|favicon.ico).*)",
             "/dashboard/:path*", 
             "/submission", 
             "/login", 
