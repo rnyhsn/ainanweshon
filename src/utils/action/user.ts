@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn, signOut } from "../auth";
+import { auth, signIn, signOut } from "../auth";
 import { ITEM_PER_PAGE } from "../constant";
 import { connectToDB } from "../db";
 import { User } from "../model/user.model";
@@ -8,7 +8,16 @@ import { errorResponse, loginSchema, registerSchema, successResponse } from "../
 import bcrypt from "bcryptjs";
 
 
+export const isAuthenticated = async () => {
+    const resp = await auth();
+    console.log("auth inside:", resp);
+    return !!resp;
+}
 
+export const isAdmin = async () => {
+    const resp = await auth();
+    return resp?.user.role === 'ADMIN';
+}
 
 
 export const logout = async () => {
