@@ -1,13 +1,18 @@
 import DashBoardHeader from '@/components/backend/header/Header'
 import ProtectedBackend from '@/components/backend/ProtectedBackend';
 import DashboardSidebar from '@/components/backend/sidebar/Sidebar'
-import { SessionProvider } from 'next-auth/react'
+import { isAdmin } from '@/utils/action/user';
+import { redirect } from 'next/navigation';
+
 import { ReactNode } from 'react'
 
-const BackendLayout = ({children}: {children: ReactNode}) => {
+const BackendLayout = async ({children}: {children: ReactNode}) => {
+  const admin = await isAdmin();
+  console.log("")
+  if(!admin) {
+    redirect("/");
+  }
   return (
-    <SessionProvider>
-      <ProtectedBackend>
       <div className="flex bg-gray-950 text-white">
         <DashboardSidebar />
         <div className="w-4/5 p-5 overflow-auto ml-[20%] min-h-screen">
@@ -17,8 +22,6 @@ const BackendLayout = ({children}: {children: ReactNode}) => {
           </div>
         </div>
       </div>
-      </ProtectedBackend>
-    </SessionProvider>
   )
 }
 
