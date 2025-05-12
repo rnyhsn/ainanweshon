@@ -65,14 +65,16 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { connectToDB } from "./db";
 import { User } from "./model/user.model";
+import { authEdgeConfig } from "./auth-edge.config";
 import bcrypt from "bcryptjs";
 
 
 export const authConfig: NextAuthConfig = {
     // secret: process.env.AUTH_SECRET,
-    session: {
-        strategy: 'jwt'
-    },
+    // session: {
+    //     strategy: 'jwt'
+    // },
+    ...authEdgeConfig,
     providers: [
         Google({
             clientId: process.env.AUTH_GOOGLE_ID,
@@ -93,7 +95,13 @@ export const authConfig: NextAuthConfig = {
                 if(!isValid) {
                     throw new Error("Wrong credentials");
                 }
-                return user;
+                // return user;
+                return {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                }
             }
         })
     ],
@@ -121,7 +129,7 @@ export const authConfig: NextAuthConfig = {
             return token;
         },
         async session({session, token}) {
-            if(session.user) {
+            if(session.user && token.role) {
                 session.user.role = String(token.role)  || "USER";
             }
             return session;
