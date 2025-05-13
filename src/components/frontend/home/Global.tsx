@@ -6,14 +6,14 @@ import Link from 'next/link';
 import ArticleCard from '../ArticleCard';
 
 const Global = async () => {
-    const national = await getArticleByCategory("featured");
-    const international = await getArticleByCategory("আর্টিকেলস")
+    const national = await getArticleByCategory("জাতীয়", 5);
+    const international = await getArticleByCategory("আন্তর্জাতিক", 5)
   return (
-    <div className="px-10 flex gap-5">
+    <div className="px-4 lg:px-10 flex flex-col lg:flex-row gap-5">
         {/* National Section */}
       <div className="flex-[2.5] rounded-sm bg-white px-6 py-8">
         <SectionTitle title='জাতীয়' link="জাতীয়" />
-        <div className="flex gap-3 justify-between flex-wrap h-max national">
+        <div className="flex md:flex-row gap-3 justify-between flex-wrap h-max national">
         {
             national.success && national.statusCode === 200 && national.payload.map((article: any, i: number) => (
                i < 5 && <Link href={`/article/${article.slug}`} className="border border-gray-300 rounded-md" key={i}>
@@ -34,7 +34,7 @@ const Global = async () => {
         <SectionTitle title="আন্তর্জাতিক" link="আন্তর্জাতিক" />
         <div className="flex flex-col gap-3 internation">
            {
-            national.success && national.statusCode === 200 && national.payload.map((article: any, i: number) => (
+            international.success && international.statusCode === 200 && international.payload.map((article: any, i: number) => (
                i < 5 && <Link href={`/article/${article.slug}`} className="border border-gray-300 flex gap-2" key={i}>
                 
                     <Image src={article.image_url} alt="" width={100} height={60} className="w-[100px] h-[60px] object-cover" />

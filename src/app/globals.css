@@ -79,3 +79,19 @@
 .cHeight {
   width: 200px
 }
+
+@media (max-width: 480px) {
+    .national > :nth-child(1) {
+    width: 100%;
+    
+  }
+
+  .national > :nth-child(2) {
+    width: 100%;
+    
+  }
+  .national > a {
+  width: 100%;
+  
+}
+}

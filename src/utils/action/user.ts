@@ -10,7 +10,6 @@ import bcrypt from "bcryptjs";
 
 export const isAuthenticated = async () => {
     const resp = await auth();
-    console.log("auth inside:", resp);
     return !!resp;
 }
 
@@ -21,7 +20,6 @@ export const isAdmin = async () => {
 
 
 export const logout = async () => {
-        'use server';
         await signOut({redirectTo: '/'})
     }
 

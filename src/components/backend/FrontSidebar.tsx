@@ -19,9 +19,9 @@ const FrontSidebar = ({latest, popular}: {latest: any, popular: any}) => {
                     <Link href={`/article/${art.slug}`} key={i} className="flex gap-1.5 items-center">
                     {
                         art.image &&
-                        <Image src={art.image} alt="" className="w-[100px] h-[60px]" width={100} height={60}  />
+                        <Image src={art.image} alt="" className="w-[60px] h-[40px] xl:w-[100px] xl:h-[60px]" width={100} height={60}  />
                     }
-                    <p className="text-xs font-semibold"> {art.articleTitle} </p>
+                    <p className="text-xs xl:font-semibold"> {art.articleTitle} </p>
                     </Link>
             )): (
                 popular.map((art: any, i: number) => (

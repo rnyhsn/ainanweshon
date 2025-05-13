@@ -1,5 +1,4 @@
 'use server';
-
 import { deleteFile, uploadFile } from "../cloudinary";
 import { connectToDB } from "../db";
 import { SiteLogo } from "../model/siteLogo.model";
@@ -40,12 +39,11 @@ export const createSiteLogo = async (formData: FormData) => {
 
 export const updateSiteInfos = async (formData: FormData) => {
     try {
-        await connectToDB();
+        
     } catch (error) {
-        console.log(error);
+        
     }
 }
-
 
 export const getSiteInfos = async () => {
     try {
@@ -96,4 +94,3 @@ export const getFooter = async () => {
     }
 }
 
-getFooter();

@@ -92,10 +92,10 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
     }
 
   return (
-    <div >
-        <h1 className="text-center mt-10">Submit Your Post Here</h1>
-        <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 w-4/6 mx-auto">
-            <div className="flex gap-5 w-full">
+    <div className="px-5 lg:px-10">
+        <h1 className="text-center mt-10 mb-8">Submit Your Post Here</h1>
+        <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 md:w-5/6 lg:w-4/6 mx-auto">
+            <div className="flex flex-col md:flex-row gap-5 w-full">
                 <div className="flex flex-col gap-1 flex-1">
                     <label className="font-semibold">First Name</label>
                     <input type="text" name="firstName" defaultValue={user.firstName} className="px-4 py-2 outline-none bg-white border border-gray-300 focus:ring-1 rounded-sm" />
@@ -107,7 +107,7 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
                     { errors.lastName && <small className="text-red-600 font-semibold"> {errors.lastName[0]} </small> }
                 </div>
             </div>
-            <div className="flex gap-5 w-full">
+            <div className="flex flex-col md:flex-row gap-5 w-full">
                 <div className="flex flex-col gap-1 flex-1">
                     <label className="font-semibold">Title</label>
                     <select name="title" className="px-4 py-2 outline-none bg-white border border-gray-300 focus:ring-1 rounded-sm font-semibold">
@@ -133,7 +133,7 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
                     { errors.gender && <small className="text-red-600 font-semibold"> {errors.gender[0]} </small> }
                 </div>
             </div>
-            <div className="flex gap-5 w-full">
+            <div className="flex gap-5 flex-col md:flex-row w-full">
                 <div className="flex flex-col gap-1 flex-1">
                     <label className="font-semibold">E-mail</label>
                     <input type="text" name="email" defaultValue={user.email} className="px-4 py-2 outline-none bg-white border border-gray-300 focus:ring-1 rounded-sm" />
@@ -144,7 +144,7 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
                     <input type="text" name="phone" className="px-4 py-2 outline-none bg-white border border-gray-300 focus:ring-1 rounded-sm"/>
                 </div>
             </div>
-            <div className="flex gap-5 w-full">
+            <div className="flex gap-5 flex-col md:flex-row w-full">
                 <div className="flex flex-col gap-1 flex-1">
                     <label className="font-semibold">Address</label>
                     <textarea  name="address" rows={2} className="px-4 py-2 outline-none bg-white border border-gray-300 focus:ring-1 rounded-sm resize-none" />
@@ -160,7 +160,7 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
                     </div>
                     <div className="flex-1 h-full">
                     {
-                        imgUrl && <div className="relative h-full w-[100px] bg-red-400">
+                        imgUrl && <div className="relative h-[100px] w-[100px] bg-red-400">
                             <Image src={imgUrl} className="object-cover" fill alt="" />
                             <TiDelete onClick={()=> setImgUrl("")} className="text-red-500 absolute -top-3 -right-3 text-4xl cursor-pointer" />
                         </div>
@@ -177,7 +177,7 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
                 <textarea name="articleTitle" rows={2} className="px-4 py-2 outline-none bg-white border border-gray-300 focus:ring-1 rounded-sm resize-none" />
                 {errors.articleTitle && <small className="text-red-600 font-semibold"> {errors.articleTitle[0]} </small> }
             </div>
-            <div className="flex gap-5 w-full">
+            <div className="flex gap-5 flex-col md:flex-row w-full">
                 <div className="flex flex-col gap-1 flex-1">
                     <label className="font-semibold">Article Type</label>
                     <select name="articleType" className="px-4 py-2 outline-none bg-white border border-gray-300 focus:ring-1 rounded-sm font-semibold">
@@ -203,7 +203,7 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
                     { errors.categories && <small className="font-semibold text-red-600"> {errors.categories[0]} </small>  }
                 </div>
             </div>
-            <div className="flex gap-5 w-full">
+            <div className="flex gap-5 flex-col md:flex-row w-full">
                 <div className="flex flex-col gap-1 flex-1">
                     <label className="font-semibold">Related Tags</label>
                     <div className="px-4 py-2 outline-none bg-white border border-gray-300 focus:ring-1 rounded-sm">
@@ -246,7 +246,7 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
             {
             [1,2,3,4,5].map((count) => (
                 count <= authorCount  &&  <div key={count} className="flex flex-col gap-3 px-8 py-2 border border-gray-300 rounded-md">
-                <div className="flex w-full gap-4">
+                <div className="flex w-full flex-col md:flex-row gap-4">
                     <div className="flex flex-col gap-1 flex-1">
                         <label className="text-sm font-semibold">First Name</label>
                         <input type="text" value={authors[count-1]?.firstName || ""} onChange={e => {
@@ -264,7 +264,7 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
                         }} className="px-4 py-1.5 outline-none bg-white border border-gray-300 focus:ring-1 rounded-sm" />
                     </div>
                 </div>
-                <div className="flex w-full gap-4">
+                <div className="flex w-full flex-col md:flex-row gap-4">
                     <div className="flex flex-col gap-1 flex-1">
                         <label className="text-sm font-semibold">Title</label>
                         <select value={authors[count-1]?.title || ""} onChange={e => {
@@ -293,7 +293,7 @@ const SubmissionForm = ({user}: {user: {firstName: string, lastName: string, ema
             ))
             } 
             </div>
-            <button disabled={pending} className={`px-8 py-2 bg-gray-950 rounded-sm text-white font-semibold w-max uppercase cursor-pointer hover:bg-gray-900 disabled:cursor-not-allowed  ${pending && "bg-gray-600"}`}> { pending ? "Submitting..." : "Submit" } </button>
+            <button disabled={pending} className={`px-8 py-2 rounded-sm text-white font-semibold w-max uppercase cursor-pointer hover:bg-gray-900 disabled:cursor-not-allowed disabled:bg-gray-600  ${pending ? "bg-gray-600" : "bg-gray-950"}`}> { pending ? "Submitting..." : "Submit" } </button>
         </form>
 
     </div>

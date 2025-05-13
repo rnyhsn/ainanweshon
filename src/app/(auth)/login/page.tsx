@@ -6,7 +6,7 @@ import React from 'react'
 const LoginPage = () => {
   return (
     <div className="w-screen h-screen bg-black/50 flex items-center justify-center">
-      <div className="w-[28%] mx-auto bg-gray-200 rounded-md px-8 py-8">
+      <div className="w-[80%] lg:w-[28%] mx-auto bg-gray-200 rounded-md px-8 py-8">
         <h1 className="text-center font-bold">Login</h1>
         <LoginForm />
         <p className="text-sm font-semibold mt-1">Don't have any account? <Link href={'/register'} className="text-blue-700">Register</Link> </p>

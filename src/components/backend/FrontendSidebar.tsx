@@ -6,7 +6,7 @@ const FrontendSidebar = async () => {
     const popular = await getSidebarPopular();
     const latest = await getSidebarLatest();
   return (
-    <div className="flex-1">
+    <div className="flex-1 hidden lg:block">
         <FrontSidebar latest={latest} popular={popular} />
     </div>
   )

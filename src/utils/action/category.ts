@@ -1,5 +1,4 @@
 'use server';
-
 import { connectToDB } from "../db";
 import { Category } from "../model/category.model";
 import { errorResponse, slugify, successResponse } from "../utils";
@@ -11,7 +10,7 @@ export const createCategory = async (formData: FormData) => {
     
     try {
         await connectToDB();
-        if(name.trim().length === 0) {
+        if(name.trim() === "") {
             return errorResponse("Field must not be empty", 422);
         }
         const exist = await Category.findOne({name});
@@ -73,7 +72,7 @@ export const updateCategory = async (formData: FormData) => {
         if(name.toString().trim().length === 0) {
             return errorResponse("Field must not be empty", 422);
         }
-        const resp = await Category.findByIdAndUpdate(id, cat);
+        await Category.findByIdAndUpdate(id, cat);
         
         return successResponse(204, "Category Updated successfully");
     } catch (error) {

@@ -3,15 +3,21 @@ import { updateComment } from '@/utils/action/comment';
 import { publishStatus } from '@/utils/utils'
 import { redirect } from 'next/navigation';
 import React, { FormEvent, useState } from 'react'
+import { toast } from 'react-toastify';
 
 const UpdateCommentForm = ({comment}: {comment: any}) => {
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [loading, setLoading] = useState(false);
     const handleUpdateComment = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true);
         const formData = new FormData(e.currentTarget);
         const resp = await updateComment(formData, comment._id);
         if(!resp.success && resp.statusCode === 400) {
             setErrors(resp.payload);
+            setLoading(false);
+        } else if (resp.success && resp.statusCode === 201) {
+            toast.success(resp.message);
             return redirect("/dashboard/comment");
         }
     }
@@ -56,7 +62,7 @@ const UpdateCommentForm = ({comment}: {comment: any}) => {
               <textarea name="comment" rows={4} className="py-2 px-4 bg-gray-950 rounded-sm outline-none resize-none" placeholder="Write your Opinion..." defaultValue={comment.comment} />
               { errors.comment && <small className="font-semibold text-red-600"> {errors.comment[0]} </small> }
           </div>
-          <button className="px-10 font-semibold bg-blue-500 cursor-pointer rounded-sm py-2">Update</button>
+          <button disabled={loading} className={`px-10 font-semibold cursor-pointer hover:bg-blue-500/90 disabled:bg-blue-300 rounded-sm py-2 ${loading ? "bg-blue-300" : "bg-blue-500"}`}> {loading ? "Wait..." : "Update"} </button>
         </form>
       </div>
     )

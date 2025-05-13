@@ -265,7 +265,7 @@ export const getArticleBySlug = async (s: string) => {
 
     try {
         await connectToDB();
-        const resp = await Article.findOne({slug});
+        const resp = await Article.findOne({slug, publishStatus: 'PUBLISHED'});
         
         if(!resp) {
             return errorResponse("Article not Found", 404);
@@ -309,7 +309,8 @@ export const getArticleByCategory = async (slug: string, limit?: number) => {
         const category = await Category.findOne({slug});
         if(category) {
             
-            const resp = limit ?  await Article.find({categories: {$in : [category._id]} }).limit(limit).sort({createdAt: -1}) : await Article.find({categories: {$in : [category._id]} }).sort({createdAt: -1});
+            const resp = limit ?  await Article.find({categories: {$in : [category._id]}, publishStatus: 'PUBLISHED' }).limit(limit).sort({createdAt: -1}) : await Article.find({categories: {$in : [category._id]}, publishStatus: 'PUBLISHED' }).sort({createdAt: -1});
+
             return successResponse(200, "SuccessFull", resp);
         } else {
             return errorResponse("No Article Found", 404);
@@ -336,7 +337,7 @@ export const updateArticle = async (formData: FormData, categories?: string[], t
             return errorResponse("Article Not Found", 404);
         }
         const updatedCats = categories?.map((cat: any) => cat._id );
-        console.log("Updated :", updatedCats);
+        
         const validated = articleSchema.safeParse({
             firstName,
             lastName,
@@ -367,11 +368,9 @@ export const updateArticle = async (formData: FormData, categories?: string[], t
 
             /// delete the attached file and Image
             if(uploadImg.public_key && uploadImg.secured_url) {
-                console.log("trying to delete the image file");
                 await deleteFile(exist.image_public_key);
             }
             if(fileDelete === 'on') {
-                console.log("Trying to delete the file");
                 await deleteFile(exist.file_public_key, true);
             }
     
@@ -420,7 +419,7 @@ export const getSidebarLatest = async () => {
 
     try {
         await connectToDB();
-        const articles = await Article.find().limit(10);
+        const articles = await Article.find({publishStatus: 'PUBLISHED'}).limit(10);
 
         // return successResponse(200, "Fetched", resp);
         const result = articles.map((art) => ({articleTitle: art.articleTitle, slug: art.slug, image: art.image_url}))
@@ -434,7 +433,7 @@ export const getSidebarLatest = async () => {
 export const getSidebarPopular = async () => {
     try {
         const resp = await Category.findOne({slug: 'জনপ্রিয়'});
-        const articles = await Article.find({categories: {$in : [resp._id]}}).limit(10).sort({createdAt: -1});
+        const articles = await Article.find({categories: {$in : [resp._id]}, publishStatus: 'PUBLISHED'}).limit(10).sort({createdAt: -1});
         // console.log(articles);
         const result: any = articles.map((art) => ({articleTitle: art.articleTitle, slug: art.slug, image: art.image_url}));
         return result;
@@ -455,7 +454,7 @@ export const getArticlesByCategorySlug = async (slug: string) => {
         // console.log("Category: ", resp);
         const catsId = cats.map((cat) => cat._id);
        
-        const articles = await Article.find({categories: {$in: catsId}}).sort({createdAt: -1});
+        const articles = await Article.find({categories: {$in: catsId}, publishStatus: "PUBLISHED"}).sort({createdAt: -1});
 
         return successResponse(200, cat.name , articles);
         

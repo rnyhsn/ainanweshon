@@ -44,6 +44,17 @@ export const getComments = async () => {
     }
 }
 
+export const getArticleComments = async (id: string) => {
+    try {
+        const comments = await Comment.find({article: id, publishStatus: 'PUBLISHED'});
+        console.log(comments);
+        return successResponse(200, "fetched", comments);
+    } catch (error) {
+        console.log(error);
+        return errorResponse();
+    }
+}
+
 
 export const getComment = async (id: string) => {
 
